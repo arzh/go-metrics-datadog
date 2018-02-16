@@ -7,7 +7,8 @@ import (
 	"time"
 
 	"github.com/DataDog/datadog-go/statsd"
-	metrics "github.com/arzh/go-metrics"
+	metrics "github.com/rcrowley/go-metrics"
+	tags "github.com/arzh/go-metrics-tags"
 )
 
 // Reporter represents a metrics registry, and the statsd client the metrics
@@ -71,7 +72,7 @@ func (r *Reporter) Flush() {
 // data submission variations.
 func (r *Reporter) FlushOnce() error {
 	r.Registry.Each(func(id string, i interface{}) {
-		name, tags := metrics.GetTags(id)
+		name, tags := tags.GetTags(id)
 		switch metric := i.(type) {
 		case metrics.Counter:
 			v := metric.Count()
